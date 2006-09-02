@@ -1,0 +1,5 @@
+action,ms,lang,code
+run,1530,k,do[100;.[`:qwer;();:;2 3]]
+run,500,k,do[10000;><`:qwer]
+run,790,k,do[10000;1:`:qwer]
+run,1180,k,do[10000;.`:qwer]

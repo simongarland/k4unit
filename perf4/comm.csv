@@ -1,0 +1,8 @@
+action,ms,lang,code
+before,0,q,value"\\q -p 5555"
+before,0,k,h:<`::5555
+run,3420,k,do[10000;h"k)!?100"]
+run,1590,k,do[10000;(-h)"23"];h"23"
+run,3190,k,do[10000;h"23"]
+run,500,k,h"k)!2500000"
+after,0,k,@[h;"\\\\";::]

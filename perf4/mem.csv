@@ -1,0 +1,6 @@
+action,ms,lang,code
+before,0,k,b:2+a:2.3+i:!1000000
+run,175,k,do[10;1_ a]
+run,160,k,do[10;2+a]
+run,215,k,do[10;a+b]
+after,0,k,a:b:i:0

@@ -1,0 +1,5 @@
+action,ms,lang,code
+before,0,k,h:<`:qwer
+run,510,k,do[100000;h"23"]
+run,310,k,h 10000000#"23"
+after,0,k,>h;~`:qwer
