@@ -15,19 +15,19 @@ KUitr:{KUTR::([]action:`symbol$();ms:`int$();lang:`symbol$();code:`symbol$();fil
 / show select count i by ok,okms,action,file from KUTR
 / KUstr[] / save test results 
 / action:	`beforeany - onetime, run before any tests
-/			`beforeeach - run code before tests in every file
-/			`before - run code before tests in this file
+/			`beforeeach - run code before each test file
+/			`before - run code before each test in containing file
 /			`run - run code, check execution time against ms
 /			`true - run code, check if returns true(1b)
 /			`fail - run code, it should fail (2+`two)
-/			`after - run code after tests in this file
-/			`aftereach - run code after tests in each file
+/			`after - run code after each test in conntaining file
+/			`aftereach - run code after each test file
 /			`afterall - onetime, run code after all tests
-/ lang: k or q, default q
+/ lang: k, q or s, default q
 / code: code to be executed
 / ms: max milliseconds it should take to run, 0 => ignore
 / file: filename
-/ action,ms,lang,code,file: from KUT
+/ action,ms,lang,code,file: from KUT 
 / msx: milliseconds taken to eXecute code
 / ok: true if the test completes correctly (note: its correct for a fail task to fail)
 / okms: true if msx is not greater than ms, ie if performance is ok
@@ -39,7 +39,7 @@ KUit KUitr[]
 
 KUltf:{ / (load test file) - load tests in file <x> into KUT
 	before:count KUT;
-	KUT,:update file:x,action:lower action,lang:`q^lower lang,ms:0^ms from `action`ms`lang`code xcol("SISS";enlist",")0:x:hsym x;
+	KUT,:update file:x,action:`comment^lower action,lang:`q^lower lang,ms:0^ms from `action`ms`lang`code xcol("SISS";enlist",")0:x:hsym x;
 	neg before-count KUT}
 
 KUltd:{ / (load test dir) - load all *.csv files in directory <x> into KUT
@@ -68,11 +68,11 @@ KUrt:{ / (run tests) - run contents of KUT, save results to KUTR
 	neg before-count KUTR}
 
 KUpexec:{[prefix;lang;code;allowfail] 
-	s:prefix,(string lang),")",string code;
+	s:$[lang=`q;"";(string lang),")"],prefix,string code;
 	if[1<.KU.VERBOSE;-1 s];$[.KU.DEBUG&allowfail;value s;@[value;s;`FA1L]]}
 
 KUexec:{[lang;code]
-	value(string lang),")",string code}
+	value$[lang=`q;"";(string lang),")"],string code}
 
 KUexecrun:{[lang;code;ms;file]
 	failed:`FA1L~r:KUpexec["\\t ";lang;code;1b];ti:$[failed;0;r];
