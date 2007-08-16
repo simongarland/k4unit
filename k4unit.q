@@ -1,6 +1,6 @@
 / k4 unit testing, loads tests from csv's, runs+logs to database
 / csv columns: action,ms,lang,code (csv with colheaders)
-/ if your code contains commas enclose the whole code in "quotes"
+/ if your code contains commas enclose the whole code in "quotes" or use a different .KU.DELIM
 / usage: q k4unit.q -p 5001
 / KUT <-> KUnit Tests
 KUit:{KUT::([]action:`symbol$();ms:`int$();lang:`symbol$();code:`symbol$();file:`symbol$());}
@@ -34,12 +34,12 @@ KUitr:{KUTR::([]action:`symbol$();ms:`int$();lang:`symbol$();code:`symbol$();fil
 / valid: true if the code is valid (ie doesn't crash - fail code is valid if it fails)
 / timestamp: when test was run
 
-KUstr:{save`:KUTR.csv} / save test results
+KUstr:{`:KUTR.csv 0:(first .KU.DELIM)0:KUTR} / save test results
 KUit KUitr[] 
 
 KUltf:{ / (load test file) - load tests in file <x> into KUT
 	before:count KUT;
-	KUT,:update file:x,action:`comment^lower action,lang:`q^lower lang,ms:0^ms from `action`ms`lang`code xcol("SISS";enlist",")0:x:hsym x;
+	KUT,:update file:x,action:`comment^lower action,lang:`q^lower lang,ms:0^ms from `action`ms`lang`code xcol("SISS";.KU.DELIM,())0:x:hsym x;
 	neg before-count KUT}
 
 KUltd:{ / (load test dir) - load all *.csv files in directory <x> into KUT
@@ -87,6 +87,10 @@ KUexecfail:{[lang;code;file]
 	`KUTR insert(`fail;0;lang;code;file;0;failed;1b;1b;.z.Z)}       
 
 \d .KU
+
+/ DELIM:
+/ used to load and save sample csvs, default ",", someimes ";" is useful
+DELIM:enlist","
 
 / VERBOSE:
 / 0 - no logging to console
