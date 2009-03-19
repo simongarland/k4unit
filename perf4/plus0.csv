@@ -1,8 +1,8 @@
-action,ms,lang,code
-before,0,k,j:2+i:!10000
-before,0,k,g:2+f:10000#2.3
-run,350,k,do[10000;+/i]
-run,450,k,do[10000;2+i]
-run,320,k,do[10000;2+f]
-run,450,k,do[10000;i+j]
-after,0,k,i:j:g:f:0
+action,ms,lang,code,repeat,comment
+before,0,k,j:2+i:!10000,1,
+before,0,k,g:2+f:10000#2.3,1,
+run,300,k,+/i,10000,
+run,375,k,2+i,10000,
+run,802,k,2+f,10000,
+run,513,k,i+j,10000,
+after,0,k,i:j:g:f:0,1,

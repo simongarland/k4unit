@@ -1,6 +1,6 @@
-action,ms,lang,code
-before,0,k,b:2+a:2.3+i:!10000
-run,240,k,do[10000;1_ a]
-run,310,k,do[10000;2+a]
-run,350,k,do[10000;a+b]
-after,0,k,a:b:i:0
+action,ms,lang,code,repeat,comment
+before,0,k,b:2+a:2.3+i:!10000,1,
+run,97,k,1_ a,10000,
+run,78,k,2+a,10000,
+run,103,k,a+b,10000,
+after,0,k,a:b:i:0,1,

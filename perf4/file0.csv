@@ -1,5 +1,5 @@
-action,ms,lang,code
-run,1530,k,do[100;.[`:qwer;();:;2 3]]
-run,500,k,do[10000;><`:qwer]
-run,790,k,do[10000;1:`:qwer]
-run,1180,k,do[10000;.`:qwer]
+action,ms,lang,code,repeat,comment
+run,68,k,.[`:qwer;();:;2 3],100,
+run,136,k,><`:qwer,10000,
+run,333,k,1:`:qwer,10000,
+run,513,k,.`:qwer,10000,

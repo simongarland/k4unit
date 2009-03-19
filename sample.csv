@@ -1,16 +1,16 @@
-action,ms,lang,code
-comment,0,,this will be ignored
-before,,k,aa::22
-before,0,k,aa::22
-before,0,q,aa::22
-before,0,q,aa::22
-true,0,k,2=+/1 1
-true,0,q,2=sum 1 1
-true,0,k,2=sum 1 1
-true,0,k,(*/2 2)~+/2 2
-true,0,k,(*/2 2)~+/2 3
-run,10,k,do[100;+/1.1+!10000]
-fail,0,q,2=`aa
-after,0,k,bb::33
-before,0,k,aa::22
-before,0,k,aa::22
+action,ms,lang,code,repeat,comment
+comment,0,q,,1,this will just be ignored
+before,0,k,aa::22,1,
+before,0,k,aa::22,1,
+before,0,q,aa::22,1,
+before,0,q,aa::22,1,comment 
+true,0,k,2=+/1 1,1,
+true,0,q,2=sum 1 1,1,
+true,0,k,2=sum 1 1,1,
+true,0,k,(*/2 2)~+/2 2,1,
+true,0,k,(*/2 2)~+/2 3,1,
+run,16,k,+/1.1+!10000,100,a few times
+fail,0,q,2=`aa,1,
+after,0,k,bb::33,1,
+before,0,k,aa::22,1,
+before,0,k,aa::22,1,
