@@ -26,7 +26,7 @@ KUitr:{KUTR::([]action:`symbol$();ms:`int$();lang:`symbol$();code:`symbol$();rep
 /			`after - run code after tests in this file ONLY
 /			`aftereach - run code after tests in each file
 /			`afterall - onetime, run code after all tests, use for cleanup/finalise
-/ lang: k or q, default q
+/ lang: k or q (or s if you really feel you must..), default q
 / code: code to be executed
 / repeat: number of repetitions (do[repeat;code]..)
 / ms: max milliseconds it should take to run, 0 => ignore
@@ -94,9 +94,9 @@ KUact:{[action;lang;code;repeat;ms;file]
 	
 KUrtf:{ / (refresh test file) updates test file x with realistic <ms> based on seen values of msx from KUTR
 	if[not x in exec file from KUTR;'"no test results found"];
-	x 0: .h.cd select action,ms,lang,code,repeat,comment from((`code xkey KUT)upsert select code,ms:floor 1.25*msx from KUTR)where file=x}
+	x 0: .h.cd select action,ms,lang,string code,repeat,comment from((`code xkey KUT)upsert select code,ms:floor 1.25*msx from KUTR)where file=x}
 
-KUf::distinct exec file from KUT / fristance: KUrtf each KUf
+KUf::distinct exec file from KUTR / fristance: KUrtf each KUf
 KUslow::delete okms from select from KUTR where not okms
 KUslowf::distinct exec file from KUslow
 KUerr::delete ok from select from KUTR where not ok
