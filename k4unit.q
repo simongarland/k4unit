@@ -101,6 +101,8 @@ KUslow::delete okms from select from KUTR where not okms
 KUslowf::distinct exec file from KUslow
 KUerr::delete ok from select from KUTR where not ok
 KUerrf::distinct exec file from KUerr
+KUinvalid::delete ok,valid from select from KUTR where not valid
+KUinvalidf::distinct exec file from KUinvalid
 
 \d .KU
 
