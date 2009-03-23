@@ -3,12 +3,12 @@
 / if your code contains commas enclose the whole code in "quotes"
 / usage: q k4unit.q -p 5001
 / KUT <-> KUnit Tests
-KUit:{KUT::([]action:`symbol$();ms:`int$();lang:`symbol$();code:`symbol$();repeat:`int$();file:`symbol$();comment:());}
+KUT:([]action:`symbol$();ms:`int$();lang:`symbol$();code:`symbol$();repeat:`int$();file:`symbol$();comment:())
 / KUltd `:dirname and/or KUltf `:filename.csv
 / KUrt[] / run tests
-/ KUTR <-> KUint Test Results
+/ KUTR <-> KUnit Test Results
 / KUrtf`:filename.csv / refresh expected <ms> based on observed results in KUTR
-KUitr:{KUTR::([]action:`symbol$();ms:`int$();lang:`symbol$();code:`symbol$();repeat:`int$();file:`symbol$();msx:`int$();ok:`boolean$();okms:`boolean$();valid:`boolean$();timestamp:`datetime$());}
+KUTR:([]action:`symbol$();ms:`int$();lang:`symbol$();code:`symbol$();repeat:`int$();file:`symbol$();msx:`int$();ok:`boolean$();okms:`boolean$();valid:`boolean$();timestamp:`datetime$())
 / look at KUTR in browser or q session
 / select from KUTR where not ok // KUerr
 / select from KUTR where not okms // KUslow
@@ -17,18 +17,18 @@ KUitr:{KUTR::([]action:`symbol$();ms:`int$();lang:`symbol$();code:`symbol$();rep
 / KUstr[] / save test results 
 / KUltr[] / reload previously saved test results
 / action:	
-/     `beforeany - onetime, run before any tests
-/			`beforeeach - run code before tests in every file
+/ 	`beforeany - onetime, run before any tests
+/		`beforeeach - run code before tests in every file
 /			`before - run code before tests in this file ONLY
 /			`run - run code, check execution time against ms
 /			`true - run code, check if returns true(1b)
 /			`fail - run code, it should fail (2+`two)
 /			`after - run code after tests in this file ONLY
-/			`aftereach - run code after tests in each file
-/			`afterall - onetime, run code after all tests, use for cleanup/finalise
+/		`aftereach - run code after tests in each file
+/	`afterall - onetime, run code after all tests, use for cleanup/finalise
 / lang: k or q (or s if you really feel you must..), default q
 / code: code to be executed
-/ repeat: number of repetitions (do[repeat;code]..)
+/ repeat: number of repetitions (do[repeat;code]..), default 1
 / ms: max milliseconds it should take to run, 0 => ignore
 / file: filename
 / action,ms,lang,code,file: from KUT
@@ -39,14 +39,12 @@ KUitr:{KUTR::([]action:`symbol$();ms:`int$();lang:`symbol$();code:`symbol$();rep
 / timestamp: when test was run
 / comment: description of the test if it's obscure.. 
 
-KUstr:{save`:KUTR.csv} / save test results
-KUltr:{`KUTR upsert("SISSISIBBBZ";enlist",")0:`:KUTR.csv} / reload previously saved test results 
-
-KUit KUitr[];
+KUstr:{.KU.SAVEFILE 0:.KU.DELIM 0:update code:string code from KUTR} / save test results
+KUltr:{`KUTR upsert("SISSISIBBBZ";enlist .KU.DELIM)0:.KU.SAVEFILE} / reload previously saved test results 
 
 KUltf:{ / (load test file) - load tests in csv file <x> into KUT
 	before:count KUT;
-	KUT,:update file:x,action:lower action,lang:`q^lower lang,ms:0^ms,repeat:1|repeat from `action`ms`lang`code`repeat`comment xcol("SISSI*";enlist",")0:x:hsym x;
+	KUT,:update file:x,action:lower action,lang:`q^lower lang,ms:0^ms,repeat:1|repeat from `action`ms`lang`code`repeat`comment xcol("SISSI*";enlist .KU.DELIM)0:x:hsym x;
 	neg before-count KUT}
 
 KUltd:{ / (load test dir) - load all *.csv files in directory <x> into KUT
@@ -81,20 +79,22 @@ KUexec:{[lang;code;repeat]
 	value(string lang),")",$[1=repeat;string code;"do[",(string repeat),";",(string code),"]"]}
 
 KUact:{[action;lang;code;repeat;ms;file]
-		if[action=`run;
-			failed:`FA1L~r:KUpexec["\\t ";lang;code;repeat;1b];ti:$[failed;0;r];
-			`KUTR insert(action;ms;lang;code;repeat;file;ti;not failed;$[ms;not ti>ms;1b];not failed;.z.Z)];
-		if[action=`true;
-			failed:`FA1L~r:KUpexec["";lang;code;repeat;1b];
-			`KUTR insert(action;0;lang;code;repeat;file;0;$[failed;0b;r~1b];1b;not failed;.z.Z)];
-	 	if[action=`fail;
-			failed:`FA1L~r:KUpexec["";lang;code;repeat;0b];
-			`KUTR insert(action;0;lang;code;repeat;file;0;failed;1b;1b;.z.Z)];
+	msx:0;ok:okms:valid:0b;
+	if[action=`run;
+		failed:`FA1L~r:KUpexec["\\t ";lang;code;repeat;1b];msx:$[failed;0;r];
+		ok:not failed;okms:$[ms;not msx>ms;1b];valid:not failed];
+	if[action=`true;
+		failed:`FA1L~r:KUpexec["";lang;code;repeat;1b];
+		ok:$[failed;0b;r~1b];okms:1b;valid:not failed];
+	if[action=`fail;
+		failed:`FA1L~r:KUpexec["";lang;code;repeat;0b];
+		ok:failed;okms:1b;valid:1b];
+	`KUTR insert(action;ms;lang;code;repeat;file;msx;ok;okms;valid;.z.Z);
 	}
 	
 KUrtf:{ / (refresh test file) updates test file x with realistic <ms> based on seen values of msx from KUTR
 	if[not x in exec file from KUTR;'"no test results found"];
-	x 0: .h.cd select action,ms,lang,string code,repeat,comment from((`code xkey KUT)upsert select code,ms:floor 1.25*msx from KUTR)where file=x}
+	x 0:.KU.DELIM 0:select action,ms,lang,string code,repeat,comment from((`code xkey KUT)upsert select code,ms:floor 1.25*msx from KUTR)where file=x}
 
 KUf::distinct exec file from KUTR / fristance: KUrtf each KUf
 KUslow::delete okms from select from KUTR where not okms
@@ -105,14 +105,16 @@ KUinvalid::delete ok,valid from select from KUTR where not valid
 KUinvalidf::distinct exec file from KUinvalid
 
 \d .KU
-
 / VERBOSE:
 / 0 - no logging to console
 / 1 - log filenames
 />1 - log tests
 VERBOSE:1
-
 / DEBUG:
 /0 - trap errors, press on regardless
 /1 - suspend if errors (except if action=`fail of course)
 DEBUG:0
+/ DELIM, csv delimiter
+DELIM:","
+/ SAVEFILE
+SAVEFILE:`:KUTR.csv
