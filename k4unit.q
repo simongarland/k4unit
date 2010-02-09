@@ -100,7 +100,7 @@ KUrtf:{ / (refresh test file) updates test file x with realistic <ms> based on s
 	if[not x in exec file from KUTR;'"no test results found"];
 	/x 0:.KU.DELIM 0:select action,ms,lang,string code,repeat,comment from((`code xkey KUT)upsert select code,ms:floor 1.25*msx from KUTR)where file=x}
 	kut:`code xkey select from KUT where file=x;kutr:select from KUTR where file=x,action=`run;
-	x 0:.KU.DELIM 0:select action,ms,space,lang,string code,repeat,comment from kut upsert select code,space:`long$floor 1.5*spacex,ms:75,repeat:500000&floor repeat*50%1|msx from kutr}
+	x 0:.KU.DELIM 0:select action,ms,space,lang,string code,repeat,comment from kut upsert select code,space:`long$floor 1.5*spacex,ms:75|floor 1.5*msx,repeat:500000&floor repeat*50%1|msx from kutr}
 
 KUf::distinct exec file from KUTR / fristance: KUrtf each KUf
 KUslow::delete okms from select from KUTR where not okms
