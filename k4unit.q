@@ -48,6 +48,7 @@ KUltr:{`KUTR upsert("SIJSSIJSIBBBBZ";enlist .KU.DELIM)0:.KU.SAVEFILE} / reload p
 KUltf:{ / (load test file) - load tests in csv file <x> into KUT
 	before:count KUT;
 	KUT,:update file:x,action:lower action,lang:`q^lower lang,ms:0^ms,space:0j^space,repeat:1|repeat from `action`ms`space`lang`code`repeat`comment xcol("SIJSSI*";enlist .KU.DELIM)0:x:hsym x;
+	/KUT,:update file:x,action:lower action,lang:`q^lower lang,ms:0^ms,space:0j,repeat:1|repeat from `action`ms`lang`code`repeat`comment xcol("SISSI*";enlist .KU.DELIM)0:x:hsym x;
 	neg before-count KUT}
 
 KUltd:{ / (load test dir) - load all *.csv files in directory <x> into KUT

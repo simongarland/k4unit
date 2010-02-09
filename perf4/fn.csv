@@ -1,4 +1,4 @@
-action,ms,lang,code,repeat,comment
-run,63,k,{do[1000000;0]}[],1,
-run,412,k,{do[1000000;---------- 0]}[],1,
-run,416,k,{do[1000000;0+0+0+0+0+ 0]}[],1,
+action,ms,space,lang,code,repeat,comment
+run,75,1728,k,{do[1000000;0]}[],0,
+run,75,3216,k,{do[1000000;---------- 0]}[],0,
+run,75,3384,k,{do[1000000;0+0+0+0+0+ 0]}[],0,

@@ -1,8 +1,8 @@
-action,ms,lang,code,repeat,comment
-before,0,k,j:2+i:!10000,1,
-before,0,k,g:2+f:10000#2.3,1,
-run,300,k,+/i,10000,
-run,375,k,2+i,10000,
-run,802,k,2+f,10000,
-run,513,k,i+j,10000,
-after,0,k,i:j:g:f:0,1,
+action,ms,space,lang,code,repeat,comment
+before,0,0,k,j:2+i:!10000,1,
+before,0,0,k,g:2+f:10000#2.3,1,
+run,75,1128,k,+/i,1269,
+run,75,98760,k,2+i,1721,
+run,75,197088,k,2+f,1705,
+run,75,98760,k,i+j,1447,
+after,0,0,k,i:j:g:f:0,1,

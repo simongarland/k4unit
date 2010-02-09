@@ -1,6 +1,6 @@
-action,ms,lang,code,repeat,comment
-before,0,k,b:2+a:2.3+i:!1000000,1,
-run,175,k,1_ a,10,
-run,160,k,2+a,10,
-run,215,k,a+b,10,
-after,0,k,a:b:i:0,1,
+action,ms,space,lang,code,repeat,comment
+before,0,0,k,b:2+a:2.3+i:!1000000,1,
+run,75,12583368,k,1_ a,3,
+run,75,12583392,k,2+a,4,
+run,75,12583368,k,a+b,2,
+after,0,0,k,a:b:i:0,1,

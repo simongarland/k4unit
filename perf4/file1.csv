@@ -1,5 +1,5 @@
-action,ms,lang,code,repeat,comment
-before,0,k,h:<`:qwer,1,
-run,510,k,h"23",100000,
-run,267,k,h 10000000#"23",1,
-after,0,k,>h;~`:qwer,1,
+action,ms,space,lang,code,repeat,comment
+before,0,0,k,h:<`:qwer,1,
+run,75,6291936,k,h"23",2680,
+run,75,31457784,k,h 10000000#"23",0,
+after,0,0,k,>h;~`:qwer,1,
