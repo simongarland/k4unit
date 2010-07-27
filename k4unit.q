@@ -131,3 +131,6 @@ DEBUG:0
 DELIM:","
 / Test Results SAVEFILE
 SAVEFILE:`:KUTR.csv
+
+\d .
+@[value;"\\l k4unit.custom.q";::];      
