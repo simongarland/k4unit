@@ -3,7 +3,7 @@
 / if your code contains commas enclose the whole code in "quotes"
 / usage: q k4unit.q -p 5001
 / KUT <-> KUnit Tests
-KUT:([]action:`symbol$();ms:`int$();bytes:`long$();lang:`symbol$();code:`symbol$();repeat:`int$();file:`symbol$();comment:())
+KUT:([]action:`symbol$();ms:`int$();bytes:`long$();lang:`symbol$();code:`symbol$();repeat:`int$();minver:`float$();file:`symbol$();comment:())
 / KUltd `:dirname and/or KUltf `:filename.csv
 / KUrt[] / run tests
 / KUTR <-> KUnit Test Results
@@ -31,6 +31,7 @@ KUTR:([]action:`symbol$();ms:`int$();bytes:`long$();lang:`symbol$();code:`symbol
 / repeat: number of repetitions (do[repeat;code]..), default 1
 / ms: max milliseconds it should take to run, 0 => ignore
 / bytes: bytes it should take to run, 0 => ignore
+/ minver: minimum version of kdb+ (.z.K)
 / file: filename
 / action,ms,bytes,lang,code,file: from KUT
 / msx: milliseconds taken to eXecute code
@@ -42,12 +43,14 @@ KUTR:([]action:`symbol$();ms:`int$();bytes:`long$();lang:`symbol$();code:`symbol
 / timestamp: when test was run
 / comment: description of the test if it's obscure.. 
 
+\c 10000 10000 
 KUstr:{.KU.SAVEFILE 0:.KU.DELIM 0:update code:string code from KUTR} / save test results
 KUltr:{`KUTR upsert("SIJSSIJSIBBBBZ";enlist .KU.DELIM)0:.KU.SAVEFILE} / reload previously saved test results 
 
 KUltf:{ / (load test file) - load tests in csv file <x> into KUT
 	before:count KUT;
-	KUT,:update file:x,action:lower action,lang:`q^lower lang,ms:0^ms,bytes:0j^bytes,repeat:1|repeat from `action`ms`bytes`lang`code`repeat`comment xcol("SIJSSI*";enlist .KU.DELIM)0:x:hsym x;
+	this:update file:x,action:lower action,lang:`q^lower lang,ms:0^ms,bytes:0j^bytes,repeat:1|repeat,minver:0^minver from `action`ms`bytes`lang`code`repeat`minver`comment xcol("SIJSSIF*";enlist .KU.DELIM)0:x:hsym x;
+	KUT,:select from this where minver<=.z.K;
 	/KUT,:update file:x,action:lower action,lang:`q^lower lang,ms:0^ms,bytes:0j,repeat:1|repeat from `action`ms`lang`code`repeat`comment xcol("SISSI*";enlist .KU.DELIM)0:x:hsym x;
 	neg before-count KUT}
 
@@ -105,7 +108,7 @@ KUrtf:{ / (refresh test file) updates test file x with realistic <ms>/<bytes>/<r
 	kutr:update repeat:1,ms:floor 1.5*msx%repeat from kutr where 75<ms%repeat;
 	kutr:update repeat:500000&floor repeat*50%1|msx,ms:75 from kutr where 75>=ms%repeat;
 	kutr:update bytes:`long$floor 1.5*bytesx from kutr;
-	x 0:.KU.DELIM 0:select action,ms,bytes,lang,string code,repeat,comment from kut upsert select code,ms,bytes,repeat from kutr} 
+	x 0:.KU.DELIM 0:select action,ms,bytes,lang,string code,repeat,minver,comment from kut upsert select code,ms,bytes,repeat from kutr} 
 
 KUf::distinct exec file from KUTR / fristance: KUrtf each KUf
 KUslow::delete okms from select from KUTR where not okms
@@ -134,3 +137,5 @@ SAVEFILE:`:KUTR.csv
 
 \d .
 @[value;"\\l k4unit.custom.q";::];      
+
+
